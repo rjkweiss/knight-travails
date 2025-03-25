@@ -45,6 +45,30 @@ class KnightPathFinder:
                 child_node.parent = curr_node
                 queue.append(child_node)
 
+    def find_path(self, end_pos):
+
+        # find the node with end_pos value
+        target_node = self._root.depth_search(end_pos)
+
+        #  if we found the node, then call trace_to_root
+        if target_node:
+            return self.trace_to_root(target_node)
+
+        # otherwise, return an empty path
+        return []
+
+    def trace_to_root(self, end_node):
+        path = []
+
+        current = end_node
+        while current is not None:
+            path.append(current.value)
+            current = current.parent
+
+        # reverse the path so it starts at the root
+        return path[::-1]
+
+
 
 
 
@@ -54,5 +78,7 @@ class KnightPathFinder:
 if __name__ == '__main__':
     knight = KnightPathFinder((0, 0))
     knight.build_move_tree()
-    for child in knight._root.children:
-        print(f"{child.value}: {[c.value for c in child.children] }")
+    print(knight.find_path((2, 1)))
+    print(knight.find_path((3, 3)))
+    print(knight.find_path((6, 2)))
+    print(knight.find_path((7, 6)))
