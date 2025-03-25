@@ -1,3 +1,5 @@
+from collections import deque
+
 from tree import Node
 
 
@@ -25,8 +27,32 @@ class KnightPathFinder:
         self._considered_positions.update(new_moves)
         return new_moves
 
+    def build_move_tree(self):
+        # create queue with root node
+        queue = deque([self._root])
+
+        while queue:
+            # pop first item in queue
+            curr_node = queue.popleft()
+            curr_pos = curr_node.value
+
+            # find new positions starting at this place
+            new_positions = self.new_move_positions(curr_pos)
+
+            # for each node, set its parents (ultimately sets the children as well)
+            for pos in new_positions:
+                child_node = Node(pos)
+                child_node.parent = curr_node
+                queue.append(child_node)
+
+
+
+
+
+
 
 if __name__ == '__main__':
     knight = KnightPathFinder((0, 0))
-    print(knight.new_move_positions((0, 0)))
-    print(knight.new_move_positions((1, 2)))
+    knight.build_move_tree()
+    for child in knight._root.children:
+        print(f"{child.value}: {[c.value for c in child.children] }")

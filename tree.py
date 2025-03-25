@@ -33,10 +33,15 @@ class Node:
 
     @parent.setter
     def parent(self, node):
-        if self._parent is not None:
-            self._parent.remove_child(self)
+        if self._parent == node:
+            return
+
+        if self._parent is not None and self in self._parent.children:
+            self._parent._children.remove(self)
+
         self._parent = node
-        if node and self not in node.children:
+
+        if node is not None and self not in node._children:
             node._children.append(self)
 
     def depth_search(self, value):
